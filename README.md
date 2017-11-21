@@ -1,29 +1,11 @@
-# Authentication service of Microservices #
+# Authentication service of Smartlog ecosystem #
 
-We describe how Authentication service is built in Smartlog's ecosystem.
+The below image describes how microservices of Smartlog's ecosystem interact with the authentication service.
 
-### What is this repository for? ###
+![Smartlog microservices](images/microservices.png =300x150)
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+We will use [JWT](https://jwt.io/introduction/) to do the authentication. Because it does not require every user have a key pair. It will reduce the change of hacking and steal the privacy information.
 
-### How do I get set up? ###
+Whenever a user requests to a specific service, if he is not authenticated by the system, he will be redirected to the login page of Authentication Service. Once user login, he will receive a response with a signature from Authentication service generated with private key. It will be used to sign for every further request to the service.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+When a service receives request with embeded signature from user, it uses the public key of the system in database to decode the signature. If service can decode the signature, it will process the request. Otherwise, it responses with 404 Error code.
