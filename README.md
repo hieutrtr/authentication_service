@@ -2,7 +2,7 @@
 
 The below image describes how microservices of Smartlog's ecosystem interact with the authentication service.
 
-![Smartlog microservices](images/microservices.png 400x200)
+![Smartlog microservices](images/microservices.png =400x200)
 
 ### What is this repository for? ###
 
