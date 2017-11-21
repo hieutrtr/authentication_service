@@ -1,6 +1,8 @@
 # Authentication service of Microservices #
 
-We describe how Authentication service is built in Smartlog's ecosystem.
+The below image describes how microservices of Smartlog's ecosystem interact with the authentication service.
+
+[Smartlog microservices](images/microservices.png)
 
 ### What is this repository for? ###
 
