@@ -33,11 +33,7 @@ jwt.refreshToken = function(payload,secretKey,refreshToken) {
       reject({status:400,message:"missing in payload"});
     }
     else {
-      console.log(refreshToken)
       r.get(refreshToken, function(err,id) {
-        console.log('err',err)
-        console.log('id',id)
-        console.log(payload)
         if (id === payload.id) {
           var tk = token.sign({
             data: payload
