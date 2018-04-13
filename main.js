@@ -7,13 +7,17 @@ var app = express()
 
 var port = process.env.PORT || 3000;
 var jwtKey = process.env.JWT_KEY
+var dbHost = process.env.DB_HOST || ''
+var dbName = process.env.DB_NAME || ''
+var dbUser = process.env.DB_USER || ''
+var dbPass = process.env.DB_PASSWORD || ''
 
 if (jwtKey === undefined) {
   console.log('missing JWT key (JWT_KEY)')
   return
 }
 
-conn = db.connect({host:"localhost",database:"sml_ua",user:"newuser",password:"password"})
+conn = db.connect({host:dbHost,database:dbName,user:dbUser,password:dbPass})
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {

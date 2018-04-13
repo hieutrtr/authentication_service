@@ -54,13 +54,13 @@ conn.register = function(body) {
 }
 
 function createORM(dbi) {
-  if (dbi.host === undefined) {
+  if (dbi.host === undefined || dbi.host === '') {
     return {error:"missing mysql host"}
   }
-  if (dbi.database === undefined) {
+  if (dbi.database === undefined || dbi.database === '') {
     return {error:"missing mysql database name"}
   }
-  if (dbi.user === undefined) {
+  if (dbi.user === undefined || dbi.user === '') {
     return {error:"missing mysql user"}
   }
   if (dbi.password === undefined) {

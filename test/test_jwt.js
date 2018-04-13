@@ -9,15 +9,11 @@ describe("jwt", function() {
     it("should be rejected when missing serect key", function(){
       return jwt.createToken({}).should.be.rejected.and.eventually.have.property('status',500);
     });
-  });
-  describe("createToken", function() {
-    it("should be rejected when missing required parameter", function(){
-      return jwt.createToken({},'serectkey').should.be.rejected.and.eventually.have.property('status',400);
-    });
-  });
-  describe("createToken", function() {
-    it("should be resolved", function(){
-      return jwt.createToken({user:'hieu',role:'admin',client:'smartlog'},'serectkey').should.eventually.have.property('token');
-    });
+      it("should be rejected when missing required parameter", function(){
+        return jwt.createToken({},'serectkey').should.be.rejected.and.eventually.have.property('status',400);
+      });
+      it("should be resolved", function(){
+        return jwt.createToken({user:'hieu',role:'admin',client:'smartlog'},'serectkey').should.eventually.have.property('token');
+      });
   });
 });

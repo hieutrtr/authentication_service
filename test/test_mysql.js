@@ -10,13 +10,12 @@ describe("mysql", function() {
     it("should have error when missing host", function(){
       return db.connect({}).should.have.property('error');
     });
-  });
-  describe("connect", function() {
     it("should have error when missing database", function(){
       return db.connect({host:'localhost'}).should.have.property('error');
     });
-  });
-  describe("connect", function() {
+    it("should have error when host is empty", function(){
+      return db.connect({host:'', database:'', user: '', password: ''}).should.have.property('error');
+    });
     it("should be object with keys", function(){
       return db.connect({host:'localhost', database:'sml_ua', user: 'hieutt', password: 'pass'}).should.have.keys('register','login','logout');
     });
