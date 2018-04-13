@@ -8,15 +8,15 @@ conn.login = function(body) {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
-      orms['account'].findAll({
-        attributes: ['username','password',],
+      orms['account'].find({
+        attributes: ['username','password','id'],
         where: {
           username: body.username
         }
       })
       .then(account => {
-        if (account.password == body.password) {
-          resolve(account);
+        if (account.toJSON().password == body.password) {
+          resolve(account.toJSON());
         } else {
           reject({status:400,message:"login fail"})
         }

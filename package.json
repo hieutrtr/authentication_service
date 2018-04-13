@@ -9,9 +9,11 @@
     "jsonwebtoken": "^8.2.1",
     "mocha": "^5.1.0",
     "mysql2": "^1.5.3",
+    "redis": "^2.8.0",
     "request": "^2.85.0",
     "sequelize": "^4.37.6",
-    "should": "^13.2.1"
+    "should": "^13.2.1",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
