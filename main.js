@@ -7,6 +7,12 @@ var account = require('./routers/account')
 var app = express()
 
 var port = process.env.PORT || 3000;
+var jwtKey = process.env.JWT_KEY
+
+if (jwtKey === undefined || jwtKey === '') {
+  console.log('missing JWT key (JWT_KEY)')
+  return
+}
 
 app.use(bodyParser.json());
 

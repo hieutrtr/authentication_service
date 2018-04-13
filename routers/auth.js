@@ -20,19 +20,41 @@ if (conn.error) {
 }
 
 router.post('/', function(req, res) {
-  conn.login(req.body)
-  .then(result => {
-    jwt.createLoginToken(result, jwtKey)
+  if(req.body.refresh_token) {
+    // TODO : optimize not hit db
+    conn.refreshLogin(req.body)
     .then(result => {
-      res.send({message:"login succesfully",result})
+      jwt.refreshToken(result, jwtKey, req.body.refresh_token)
+      .then(result => {
+        res.send({message:"refresh succesfully",result})
+      })
+      .catch(err => {
+        res.status(err.status).send(err.message)
+      });
     })
     .catch(err => {
       res.status(err.status).send(err.message)
     });
-  })
-  .catch(err => {
-    res.status(err.status).send(err.message)
-  });
+  } else {
+    conn.login(req.body)
+    .then(result => {
+      jwt.createLoginToken(result, jwtKey)
+      .then(result => {
+        res.send({message:"login succesfully",result})
+      })
+      .catch(err => {
+        res.status(err.status).send(err.message)
+      });
+    })
+    .catch(err => {
+      res.status(err.status).send(err.message)
+    });
+  }
+
+});
+
+router.put('/', function(req,res) {
+  req.body.refresh
 });
 
 module.exports = router

@@ -25,6 +25,23 @@ conn.login = function(body) {
   });
 }
 
+conn.refreshLogin = function(body) {
+  return new Promise((resolve,reject) => {
+    sequelize.sync()
+    .then(() => {
+      orms['account'].find({
+        attributes: ['username','password','id'],
+        where: {
+          id: body.id
+        }
+      })
+      .then(account => {
+        resolve(account.toJSON());
+      });
+    });
+  });
+}
+
 conn.logout = function(body) {
   return new Promise((resolve,reject) => {
     reject({status:400,message:"cannot logout"});
