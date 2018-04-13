@@ -6,7 +6,22 @@ var orms = {};
 
 conn.login = function(body) {
   return new Promise((resolve,reject) => {
-    resolve({user:"hieu",role:"admin",client:"smartlog"});
+    sequelize.sync()
+    .then(() => {
+      orms['account'].findAll({
+        attributes: ['username','password',],
+        where: {
+          username: body.username
+        }
+      })
+      .then(account => {
+        if (account.password == body.password) {
+          resolve(account);
+        } else {
+          reject({status:400,message:"login fail"})
+        }
+      });
+    });
   });
 }
 

@@ -1,7 +1,7 @@
 var token = require('jsonwebtoken');
 var jwt = {}
 
-jwt.createToken = function(payload,secretKey) {
+jwt.createLoginToken = function(payload,secretKey) {
   return new Promise((resolve,reject) => {
     if (secretKey === undefined || secretKey === '') {
       reject({status:500,message:"missing in serect key"});
@@ -20,4 +20,4 @@ jwt.createToken = function(payload,secretKey) {
   });
 }
 
-exports.jwt = jwt
+module.exports = jwt

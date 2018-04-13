@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var db = require('./handler/mysql');
-var jwt = require('./handler/jwt').jwt;
+var jwt = require('./handler/jwt');
 var app = express()
 
 var port = process.env.PORT || 3000;
@@ -42,7 +42,7 @@ app.post('/login', function(req, res) {
   console.log(conn)
   conn.login(req.body)
   .then(result => {
-    jwt.createToken(result, jwtKey)
+    jwt.createLoginToken(result, jwtKey)
     .then(result => {
       res.send({message:"login succesfully",token:result.token})
     })
