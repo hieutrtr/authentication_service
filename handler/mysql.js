@@ -40,15 +40,15 @@ conn.register = function(body) {
           resolve({data:res.toJSON()});
         })
         .catch(err => {
-          reject({status:400,message:err.errors})
+          reject({status:400,message:err})
         })
       })
       .catch(err => {
-        reject({status:400,message:err.errors})
+        reject({status:400,message:err})
       })
     })
     .catch(err => {
-      reject({status:400,message:err.errors})
+      reject({status:500,message:err})
     });
   });
 }
@@ -89,7 +89,7 @@ exports.connect = function(dbi) {
     if (res.error) {
       return res
     }
-    const uadb = require("../models/user_account").ua
+    const uadb = require("../models/authentication")
     createDB(uadb)
     return conn
 }

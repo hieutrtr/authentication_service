@@ -1,9 +1,9 @@
 var token = require('jsonwebtoken');
 var jwt = {}
 
-jwt.createToken = function(payload,secret) {
+jwt.createToken = function(payload,secretKey) {
   return new Promise((resolve,reject) => {
-    if (secret === undefined) {
+    if (secretKey === undefined || secretKey === '') {
       reject({status:500,message:"missing in serect key"});
     }
     if (payload.user === undefined ||
@@ -14,7 +14,7 @@ jwt.createToken = function(payload,secret) {
     else {
       var tk = token.sign({
         data: payload
-      }, 'secret', { expiresIn: '1m' });
+      }, secretKey, { expiresIn: '1m' });
       resolve({token:tk});
     }
   });

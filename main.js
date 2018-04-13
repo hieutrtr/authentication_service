@@ -18,6 +18,10 @@ if (jwtKey === undefined) {
 }
 
 conn = db.connect({host:dbHost,database:dbName,user:dbUser,password:dbPass})
+if (conn.error) {
+  console.log(conn.error)
+  return
+}
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {

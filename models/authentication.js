@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
-exports.ua = {
-  'service': {
+module.exports = {
+  service: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -11,7 +11,7 @@ exports.ua = {
     name: Sequelize.CHAR(50),
     url: Sequelize.CHAR(50)
   },
-  'role': {
+  role: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -22,7 +22,7 @@ exports.ua = {
     name: Sequelize.CHAR(50),
     api: Sequelize.CHAR(50)
   },
-  'action': {
+  action: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -33,11 +33,11 @@ exports.ua = {
     name: Sequelize.CHAR(50),
     api: Sequelize.CHAR(50)
   },
-  'policyaction': {
+  policyaction: {
     policyId: Sequelize.CHAR(36),
     actionId: Sequelize.CHAR(36)
   },
-  'policy': {
+  policy: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -46,11 +46,11 @@ exports.ua = {
     },
     name: Sequelize.CHAR(50)
   },
-  'accountpolicy': {
+  accountpolicy: {
     policyId: Sequelize.CHAR(36),
     accountId: Sequelize.CHAR(36)
   },
-  'account': {
+  account: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
@@ -63,7 +63,7 @@ exports.ua = {
     firstName: Sequelize.CHAR(50),
     lastName: Sequelize.CHAR(50)
   },
-  'client': {
+  client: {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
