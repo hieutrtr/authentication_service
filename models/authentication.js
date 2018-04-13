@@ -3,9 +3,9 @@ const Sequelize = require('sequelize');
 module.exports = {
   service: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
     name: Sequelize.CHAR(50),
@@ -13,51 +13,51 @@ module.exports = {
   },
   role: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
-    serviceId: Sequelize.CHAR(36),
+    serviceId: Sequelize.UUID,
     name: Sequelize.CHAR(50),
     api: Sequelize.CHAR(50)
   },
   action: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
-    functionId: Sequelize.CHAR(36),
+    functionId: Sequelize.UUID,
     name: Sequelize.CHAR(50),
     api: Sequelize.CHAR(50)
   },
   policyaction: {
-    policyId: Sequelize.CHAR(36),
-    actionId: Sequelize.CHAR(36)
+    policyId: Sequelize.UUID,
+    actionId: Sequelize.UUID,
   },
   policy: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
     name: Sequelize.CHAR(50)
   },
   accountpolicy: {
-    policyId: Sequelize.CHAR(36),
-    accountId: Sequelize.CHAR(36)
+    policyId: Sequelize.UUID,
+    accountId: Sequelize.UUID,
   },
   account: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
-    clientId: Sequelize.CHAR(36),
+    clientId: Sequelize.UUID,
     username: Sequelize.CHAR(50),
     password: Sequelize.CHAR(50),
     firstName: Sequelize.CHAR(50),
@@ -65,9 +65,9 @@ module.exports = {
   },
   client: {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
       unique: true,
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
     code: Sequelize.CHAR(100),
