@@ -1,6 +1,14 @@
 const Sequelize = require('sequelize');
 
-module.exports = {
+exports.association = {
+  account:{client:'clientId'},
+  accountpolicy:{account:'accountId',policy:'policyId'},
+  policyaction:{policy:'policyId',action:'actionId'},
+  action:{role:'roleId'},
+  role:{service:'serviceId'}
+}
+
+exports.schema = {
   service: {
     id: {
       type: Sequelize.UUID,

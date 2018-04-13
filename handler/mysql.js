@@ -79,8 +79,19 @@ function createORM(dbi) {
 }
 
 function createDB(uadb) {
-  Object.entries(uadb).forEach(table => {
-    orms[table[0]] = sequelize.define(table[0],table[1])
+  return new Promise((resolve,reject) => {
+    Object.entries(uadb).forEach(table => {
+      orms[table[0]] = sequelize.define(table[0],table[1])
+    });
+    resolve()
+  });
+}
+
+function associateDB(associations) {
+  Object.entries(associations).forEach(association => {
+    Object.entries(association[1]).forEach(a => {
+      orms[association[0]].belongsTo(orms[a[0]],{foreignKey: orms[a[1]]})
+    });
   });
 }
 
@@ -89,7 +100,8 @@ exports.connect = function(dbi) {
     if (res.error) {
       return res
     }
-    const uadb = require("../models/authentication")
-    createDB(uadb)
+    const audb = require("../models/authentication")
+    createDB(audb.schema)
+    .then(associateDB(audb.association))
     return conn
 }
