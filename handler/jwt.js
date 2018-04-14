@@ -47,4 +47,17 @@ jwt.refreshToken = function(payload,secretKey,refreshToken) {
   });
 }
 
+jwt.revokeToken = function(id,refreshToken) {
+  return new Promise((resolve,reject) => {
+    r.get(refreshToken, function(err,rid) {
+      if (rid === id) {
+        r.del(refreshToken)
+        resolve()
+      } else {
+       reject({status:400,message:"refresh token is invalid"});
+      }
+    });
+  });
+}
+
 module.exports = jwt

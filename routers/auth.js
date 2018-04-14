@@ -50,11 +50,21 @@ router.post('/', function(req, res) {
       res.status(err.status).send(err.message)
     });
   }
-
 });
 
-router.put('/', function(req,res) {
-  req.body.refresh
+router.delete('/', function(req, res) {
+  if(req.body.refresh_token) {
+    // TODO : optimize not hit db
+    jwt.revokeToken(req.body.id,req.body.refresh_token)
+    .then(result => {
+      res.send({message:"revoke succesfully",result})
+    })
+    .catch(err => {
+      res.status(err.status).send(err.message)
+    });
+  } else {
+    res.status(400).send("refresh token is invalid")
+  }
 });
 
 module.exports = router
