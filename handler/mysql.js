@@ -4,6 +4,43 @@ var db = {};
 var conn = {};
 var orms = {};
 
+conn.setRole = function(body) {
+  return new Promise((resolve,reject) => {
+    sequelize.sync()
+    .then(() => {
+      orms['role'].create({
+        name: body.name,
+        code: body.code,
+        url: body.url,
+        address: body.address
+      })
+      .then(res => {
+        // console.log(res)
+        console.log(res.toJSON().id);
+        orms['account'].create({
+          clientId: res.toJSON().id,
+          username: body.username,
+          password: body.password,
+          firstName: body.firstName,
+          lastName: body.lastName
+        })
+        .then(res => {
+          resolve({data:res.toJSON()});
+        })
+        .catch(err => {
+          reject({status:400,message:err})
+        })
+      })
+      .catch(err => {
+        reject({status:400,message:err})
+      })
+    })
+    .catch(err => {
+      reject({status:500,message:err})
+    });
+  });
+}
+
 conn.login = function(body) {
   return new Promise((resolve,reject) => {
     sequelize.sync()
