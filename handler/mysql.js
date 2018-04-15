@@ -50,21 +50,16 @@ conn.setRole = function(body) {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
-      orms['role'].create({
-        name: body.name,
-        code: body.code,
-        url: body.url,
-        address: body.address
+      orms['policy'].find({
+        attributes: ['id'],
+        where: {
+          name: body.policyName
+        }
       })
       .then(res => {
-        // console.log(res)
-        console.log(res.toJSON().id);
-        orms['account'].create({
-          clientId: res.toJSON().id,
-          username: body.username,
-          password: body.password,
-          firstName: body.firstName,
-          lastName: body.lastName
+        orms['accountpolicy'].create({
+          accountId: body.accountId,
+          policyId: res.toJSON().id,
         })
         .then(res => {
           resolve({data:res.toJSON()});
