@@ -4,7 +4,7 @@ var db = {};
 var conn = {};
 var orms = {};
 
-conn.mockup = function() {
+conn.mockup = () => {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
@@ -46,7 +46,7 @@ conn.mockup = function() {
   })
 }
 
-conn.setRole = function(body) {
+conn.setRole = (body) => {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
@@ -78,7 +78,7 @@ conn.setRole = function(body) {
   });
 }
 
-conn.login = function(body) {
+conn.login = (body) => {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
@@ -99,7 +99,7 @@ conn.login = function(body) {
   });
 }
 
-conn.refreshLogin = function(body) {
+conn.refreshLogin = (body) => {
   return new Promise((resolve,reject) => {
     sequelize.sync()
     .then(() => {
@@ -116,47 +116,52 @@ conn.refreshLogin = function(body) {
   });
 }
 
-conn.logout = function(body) {
+conn.logout = (body) => {
   return new Promise((resolve,reject) => {
     reject({status:400,message:"cannot logout"});
   });
 }
 
-conn.register = function(body) {
+conn.register = (body) => {
   return new Promise((resolve,reject) => {
+    var client = {}
     sequelize.sync()
     .then(() => {
-      orms['client'].create({
+      return orms['client'].create({
         name: body.name,
         code: body.code,
         url: body.url,
         address: body.address
       })
-      .then(res => {
-        // console.log(res)
-        console.log(res.toJSON().id);
-        orms['account'].create({
-          clientId: res.toJSON().id,
-          username: body.username,
-          password: body.password,
-          firstName: body.firstName,
-          lastName: body.lastName
-        })
-        .then(res => {
-          resolve({data:res.toJSON()});
-        })
-        .catch(err => {
-          reject({status:400,message:err})
-        })
-      })
-      .catch(err => {
-        reject({status:400,message:err})
+    })
+    .then(res => {
+      client = res.toJSON();
+      return orms['account'].create({
+        clientId: client.id,
+        username: body.username,
+        password: body.password,
+        firstName: body.firstName,
+        lastName: body.lastName
       })
     })
+    .then(res => {
+      var data = res.toJSON()
+      data.accountId = data.id
+      client.clientId = client.id
+      resolve({...data, ...client});
+    })
     .catch(err => {
-      reject({status:500,message:err})
-    });
+      reject({status:400,message:err})
+    })
   });
+}
+
+conn.close = () => {
+  return sequelize.close()
+}
+
+conn.authenticate = function () {
+  return sequelize.authenticate()
 }
 
 function createORM(dbi) {
@@ -201,7 +206,7 @@ function associateDB(associations) {
   });
 }
 
-exports.connect = function(dbi) {
+exports.connect = (dbi) => {
     res = createORM(dbi)
     if (res.error) {
       return res

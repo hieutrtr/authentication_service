@@ -12,7 +12,7 @@ if (conn.error) {
   return
 }
 
-router.post('/', function(req, res) {
+router.post('/', (req, res) => {
   conn.register(req.body)
   .then(result => {
     res.send({message:"register succesfully",data:result.data})

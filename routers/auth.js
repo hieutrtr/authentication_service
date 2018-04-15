@@ -19,7 +19,7 @@ if (conn.error) {
   return
 }
 
-router.post('/', function(req, res) {
+router.post('/', (req, res) => {
   if(req.body.refresh_token) {
     // TODO : optimize not hit db
     conn.refreshLogin(req.body)
@@ -52,7 +52,7 @@ router.post('/', function(req, res) {
   }
 });
 
-router.delete('/', function(req, res) {
+router.delete('/', (req, res) => {
   if(req.body.refresh_token) {
     // TODO : optimize not hit db
     jwt.revokeToken(req.body.id,req.body.refresh_token)

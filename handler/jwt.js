@@ -3,13 +3,14 @@ const uuidv1 = require('uuid/v1');
 var r = require("redis").createClient()
 var jwt = {}
 
-jwt.createLoginToken = function(payload,secretKey) {
+jwt.createLoginToken = (payload,secretKey) => {
   return new Promise((resolve,reject) => {
     if (secretKey === undefined || secretKey === '') {
       reject({status:500,message:"missing in serect key"});
     }
     if (payload.username === undefined ||
-     payload.password === undefined) {
+     payload.password === undefined ||
+      payload.id === undefined) {
       reject({status:400,message:"missing in payload"});
     }
     else {
@@ -23,17 +24,17 @@ jwt.createLoginToken = function(payload,secretKey) {
   });
 }
 
-jwt.refreshToken = function(payload,secretKey,refreshToken) {
+jwt.refreshToken = (payload,secretKey,refreshToken) => {
   return new Promise((resolve,reject) => {
     if (secretKey === undefined || secretKey === '') {
       reject({status:500,message:"missing in serect key"});
     }
     if (payload.username === undefined ||
-     payload.password === undefined) {
+     payload.id === undefined) {
       reject({status:400,message:"missing in payload"});
     }
     else {
-      r.get(refreshToken, function(err,id) {
+      r.get(refreshToken, (err,id) => {
         if (id === payload.id) {
           var tk = token.sign({
             data: payload
@@ -47,9 +48,9 @@ jwt.refreshToken = function(payload,secretKey,refreshToken) {
   });
 }
 
-jwt.revokeToken = function(id,refreshToken) {
+jwt.revokeToken = (id,refreshToken) => {
   return new Promise((resolve,reject) => {
-    r.get(refreshToken, function(err,rid) {
+    r.get(refreshToken, (err,rid) => {
       if (rid === id) {
         r.del(refreshToken)
         resolve()

@@ -1,23 +1,20 @@
 var db = require('../handler/mysql');
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
-
+var conn
 chai.use(chaiAsPromised);
 chai.should();
 
-describe("mysql", function() {
-  describe("connect", function() {
-    it("should have error when missing host", function(){
+describe("mysql", () => {
+  describe("connect", () => {
+    it("should have error when missing host", () =>{
       return db.connect({}).should.have.property('error');
     });
-    it("should have error when missing database", function(){
+    it("should have error when missing database", () =>{
       return db.connect({host:'localhost'}).should.have.property('error');
     });
-    it("should have error when host is empty", function(){
+    it("should have error when host is empty", () =>{
       return db.connect({host:'', database:'', user: '', password: ''}).should.have.property('error');
-    });
-    it("should be object with keys", function(){
-      return db.connect({host:'localhost', database:'sml_ua', user: 'hieutt', password: 'pass'}).should.have.keys('register','login','logout');
     });
   });
 });

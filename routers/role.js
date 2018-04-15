@@ -12,7 +12,7 @@ if (conn.error) {
   return
 }
 
-router.post('/', function(req, res) {
+router.post('/', (req, res) => {
   conn.setRole(req.body)
   .then(result => {
     res.send({message:"set role succesfully",data:result.data})
