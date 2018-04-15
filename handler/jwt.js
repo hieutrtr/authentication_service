@@ -9,7 +9,7 @@ jwt.createLoginToken = (payload,secretKey) => {
       reject({status:500,message:"missing in serect key"});
     }
     if (payload.username === undefined ||
-     payload.password === undefined ||
+     payload.password_hash === undefined ||
       payload.id === undefined) {
       reject({status:400,message:"missing in payload"});
     }

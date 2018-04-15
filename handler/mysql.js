@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+var sha256 = require('sha256');
 var sequelize
 var db = {};
 var conn = {};
@@ -83,13 +84,13 @@ conn.login = (body) => {
     sequelize.sync()
     .then(() => {
       orms['account'].find({
-        attributes: ['username','password','id'],
+        attributes: ['username','password_hash','id'],
         where: {
           username: body.username
         }
       })
       .then(account => {
-        if (account.toJSON().password == body.password) {
+        if (account.toJSON().password_hash == sha256(body.password)) {
           resolve(account.toJSON());
         } else {
           reject({status:400,message:"login fail"})
@@ -135,7 +136,6 @@ conn.register = (body) => {
       })
     })
     .then(res => {
-      console.log(res)
       if (res === null) {
         return orms['client'].create({
           name: body.name,
@@ -143,8 +143,9 @@ conn.register = (body) => {
           url: body.url,
           address: body.address
         })
+      } else {
+        return Promise.resolve(res)
       }
-      return Promise.resolve(res)
     })
     .then(res => {
       client = res.toJSON();

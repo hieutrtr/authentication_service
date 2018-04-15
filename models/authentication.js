@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+var sha256 = require('sha256');
 
 exports.association = {
   account:{client:'clientId'},
@@ -66,8 +67,26 @@ exports.schema = {
       primaryKey: true
     },
     clientId: Sequelize.UUID,
-    username: Sequelize.CHAR(50),
-    password: Sequelize.CHAR(50),
+    username: {
+      type: Sequelize.CHAR(50),
+      unique: true,
+      allowNull: false
+    },
+    password: {
+     type: Sequelize.VIRTUAL,
+     set: function (val) {
+        this.setDataValue('password', val);
+        this.setDataValue('password_hash', sha256(val));
+      },
+      validate: {
+         isLongEnough: function (val) {
+           if (val.length < 7) {
+             throw new Error("Please choose a longer password")
+          }
+        }
+      }
+    },
+    password_hash: Sequelize.STRING,
     firstName: Sequelize.CHAR(50),
     lastName: Sequelize.CHAR(50)
   },
@@ -79,7 +98,11 @@ exports.schema = {
       primaryKey: true
     },
     code: Sequelize.CHAR(100),
-    name: Sequelize.CHAR(50),
+    name: {
+      type: Sequelize.CHAR(50),
+      unique: true,
+      allowNull: false
+    },
     url: Sequelize.CHAR(50),
     address: Sequelize.CHAR(50)
   }
