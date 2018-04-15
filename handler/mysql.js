@@ -4,6 +4,48 @@ var db = {};
 var conn = {};
 var orms = {};
 
+conn.mockup = function() {
+  return new Promise((resolve,reject) => {
+    sequelize.sync()
+    .then(() => {
+      return orms['service'].bulkCreate([
+        {name:"STM",url:"stm.smartlog.com"},
+        {name:"Bidding",url:"bidding.smartlog.com"},
+        {name:"SWM",url:"swm.smartlog.com"},
+      ])
+    })
+    .then(res => {
+        return orms['role'].bulkCreate([
+          {serviceId:res[0].toJSON().id,name:"admin",api:"admin.api"},
+          {serviceId:res[1].toJSON().id,name:"editor",api:"editor.api"},
+          {serviceId:res[2].toJSON().id,name:"reader",api:"reader.api"},
+        ])
+      })
+    .then(res => {
+      return orms['action'].bulkCreate([
+        {roleId:res[0].toJSON().id,name:"full",api:"full.api"},
+        {roleId:res[1].toJSON().id,name:"readwrite",api:"readwrite.api"},
+        {roleId:res[2].toJSON().id,name:"readonly",api:"readonly.api"},
+      ])
+    })
+    .then(res => {
+      var actions = res;
+      orms['policy'].bulkCreate([
+        {name:"full"},
+        {name:"readwrite"},
+        {name:"readonly"},
+      ])
+      .then(res => {
+        orms['policyaction'].bulkCreate([
+          {policyId:res[0].toJSON().id,actionId:actions[0].toJSON().id},
+          {policyId:res[1].toJSON().id,actionId:actions[1].toJSON().id},
+          {policyId:res[2].toJSON().id,actionId:actions[2].toJSON().id},
+        ])
+      })
+    })
+  })
+}
+
 conn.setRole = function(body) {
   return new Promise((resolve,reject) => {
     sequelize.sync()
