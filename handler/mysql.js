@@ -89,13 +89,13 @@ conn.login = (body) => {
           username: body.username
         }
       })
-      .then(account => {
-        if (account.toJSON().password_hash == sha256(body.password)) {
-          resolve(account.toJSON());
-        } else {
-          reject({status:400,message:"login fail"})
-        }
-      });
+    })
+    .then(account => {
+      if (account.toJSON().password_hash == sha256(body.password)) {
+        resolve(account.toJSON());
+      } else {
+        reject({status:400,message:"login fail"})
+      }
     });
   });
 }
