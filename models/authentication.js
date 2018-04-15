@@ -37,7 +37,7 @@ exports.schema = {
       defaultValue: Sequelize.UUIDV1,
       primaryKey: true
     },
-    functionId: Sequelize.UUID,
+    roleId: Sequelize.UUID,
     name: Sequelize.CHAR(50),
     api: Sequelize.CHAR(50)
   },
