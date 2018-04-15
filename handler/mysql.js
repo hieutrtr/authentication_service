@@ -127,12 +127,24 @@ conn.register = (body) => {
     var client = {}
     sequelize.sync()
     .then(() => {
-      return orms['client'].create({
-        name: body.name,
-        code: body.code,
-        url: body.url,
-        address: body.address
+      return orms['client'].findOne({
+        attributes: ['id'],
+        where: {
+          name: body.name
+        }
       })
+    })
+    .then(res => {
+      console.log(res)
+      if (res === null) {
+        return orms['client'].create({
+          name: body.name,
+          code: body.code,
+          url: body.url,
+          address: body.address
+        })
+      }
+      return Promise.resolve(res)
     })
     .then(res => {
       client = res.toJSON();
