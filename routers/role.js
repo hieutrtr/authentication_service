@@ -1,19 +1,8 @@
-var router = require('express').Router()
-var db = require('../handler/mysql');
-
-var dbHost = process.env.DB_HOST || ''
-var dbName = process.env.DB_NAME || ''
-var dbUser = process.env.DB_USER || ''
-var dbPass = process.env.DB_PASSWORD || ''
-
-var conn = db.connect({host:dbHost,database:dbName,user:dbUser,password:dbPass})
-if (conn.error) {
-  console.log(conn.error)
-  return
-}
+import express from 'express'
+var router = express.Router()
 
 router.post('/', (req, res) => {
-  conn.setRole(req.body)
+  req.app.locals.db.setRole(req.body)
   .then(result => {
     res.send({message:"set role succesfully",data:result.data})
   })
@@ -22,4 +11,4 @@ router.post('/', (req, res) => {
   });
 });
 
-module.exports = router
+export default router

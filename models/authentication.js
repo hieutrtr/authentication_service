@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 var sha256 = require('sha256');
 
-exports.association = {
+export const associations = {
   account:{client:'clientId'},
   accountpolicy:{account:'accountId',policy:'policyId'},
   policyaction:{policy:'policyId',action:'actionId'},
@@ -9,7 +9,7 @@ exports.association = {
   role:{service:'serviceId'}
 }
 
-exports.schema = {
+export const schema = {
   service: {
     id: {
       type: Sequelize.UUID,
