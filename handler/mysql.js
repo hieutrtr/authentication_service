@@ -61,7 +61,6 @@ export default class Mysql {
     });
   }
 
-
   refreshLogin(body) {
     var sequelize = this.sequelize
     var orms = this.orms
@@ -85,19 +84,18 @@ export default class Mysql {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
-      sequelize.sync()
-      .then(() => {
+      return sequelize.transaction(function(t) {
         return orms['policy'].find({
           attributes: ['id'],
           where: {
             name: body.policyName
           }
-        })
-      })
-      .then(res => {
-        return orms['accountpolicy'].create({
-          accountId: body.accountId,
-          policyId: res.toJSON().id,
+        },{transaction: t})
+        .then(res => {
+          return orms['accountpolicy'].create({
+            accountId: body.accountId,
+            policyId: res.toJSON().id,
+          },{transaction: t})
         })
       })
       .then(res => {
@@ -106,12 +104,6 @@ export default class Mysql {
       .catch(err => {
         reject({status:400,message:err})
       });
-    });
-  }
-
-  logout(body) {
-    return new Promise((resolve,reject) => {
-      reject({status:400,message:"cannot logout"});
     });
   }
 
