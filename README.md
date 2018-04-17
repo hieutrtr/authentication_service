@@ -29,7 +29,11 @@ docker run --name redis -p 6379:6379  -d redis redis-server --appendonly yes
 ```
 Use environment variables for configuration of ORM database (MySQL).
 ```bash
-export DB_HOST=localhost DB_NAME=smlauth DB_USER=api DB_PASS=123456
+export DB_HOST=localhost DB_NAME=smlauth DB_USER=hieu DB_PASS=123456
+```
+Use environment variables for configuration of JWT + Redis.
+```bash
+export REDIS_PORT=6379 REDIS_HOST=localhost JWT_KEY=sml#uthen
 ```
 Start service
 ```bash
@@ -40,8 +44,22 @@ Build production
 ```bash
 npm i
 bash build.js
+node main.js # Entrypoint
 ```
 Test service
 ```bash
 npm test
+```
+Run docker
+```bash
+docker run --name smartlog-auth-service -p 3000:3000 \
+--link mysql1 --link redis \
+-e DB_HOST=mysql1 \
+-e DB_NAME=smlauth \
+-e DB_USER=hieu \
+-e DB_PASSWORD=123456 \
+-e REDIS_PORT=6379 \
+-e REDIS_HOST=redis \
+-e JWT_KEY=sml#uthen \
+ -d smartlog-auth-service
 ```
