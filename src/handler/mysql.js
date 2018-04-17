@@ -62,6 +62,9 @@ export default class Mysql {
   }
 
   refreshLogin(accountId) {
+    if (accountId === undefined || accountId === '') {
+      return Promise.reject({error:'missing accountId'})
+    }
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
@@ -81,6 +84,12 @@ export default class Mysql {
   }
 
   setRole(body) {
+    if (body.policyName === undefined || body.policyName === '') {
+      return Promise.reject({error:'missing policyName'})
+    }
+    if (body.accountId === undefined || body.accountId === '') {
+      return Promise.reject({error:'missing accountId'})
+    }
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
@@ -102,12 +111,18 @@ export default class Mysql {
         resolve({data:res.toJSON()});
       })
       .catch(err => {
-        reject({status:400,message:err})
+        reject({message:err})
       });
     });
   }
 
   login(body) {
+    if (body.username === undefined || body.username === '') {
+      return Promise.reject({error:'missing username'})
+    }
+    if (body.password === undefined || body.password === '') {
+      return Promise.reject({error:'missing password'})
+    }
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
@@ -122,12 +137,12 @@ export default class Mysql {
           if (account.toJSON().password_hash == sha256(body.password)) {
             resolve(account.toJSON());
           } else {
-            reject({status:400,error:{message:"wrong password"}})
+            reject({error:{message:"wrong password"}})
           }
         })
         .catch(err => {
           console.log(err)
-          reject({status:400,error:err})
+          reject({error:err})
         });
       });
     });
@@ -178,7 +193,7 @@ export default class Mysql {
         resolve(data);
       }).catch(err => {
         delete err.errors[0].instance
-        reject({status:400,message:err.errors})
+        reject({message:err.errors})
       });
     });
   }

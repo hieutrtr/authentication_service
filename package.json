@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "babel-node main.js",
-    "test": "mocha"
+    "test": "mocha --compilers js:babel-core/register ./src/test/"
   },
   "author": "",
   "license": "ISC",
