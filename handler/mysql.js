@@ -10,16 +10,16 @@ export default class Mysql {
 
   static syncModels(dbi) {
     if (dbi.host === undefined || dbi.host === '') {
-      return {error:"missing mysql host"}
+      return Promise.reject({error:"missing mysql host"})
     }
     if (dbi.database === undefined || dbi.database === '') {
-      return {error:"missing mysql database name"}
+      return Promise.reject({error:"missing mysql database name"})
     }
     if (dbi.user === undefined || dbi.user === '') {
-      return {error:"missing mysql user"}
+      return Promise.reject({error:"missing mysql user"})
     }
     if (dbi.password === undefined) {
-      return {error:"missing mysql password"}
+      return Promise.reject({error:"missing mysql password"})
     }
     const {
       host,
@@ -61,7 +61,7 @@ export default class Mysql {
     });
   }
 
-  refreshLogin(body) {
+  refreshLogin(accountId) {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
@@ -69,7 +69,7 @@ export default class Mysql {
         return orms['account'].find({
           attributes: ['username','id'],
           where: {
-            id: body.id
+            id: accountId
           }
         },{transaction: t})
       }).then(account => {
@@ -141,16 +141,16 @@ export default class Mysql {
         return orms['client'].findOne({
           attributes: ['id'],
           where: {
-            name: body.name
+            name: body.clientName
           }
         }, {transaction: t})
         .then(res => {
           if (res === null) {
             return orms['client'].create({
-              name: body.name,
-              code: body.code,
-              url: body.url,
-              address: body.address
+              name: body.clientName,
+              code: body.clientcode,
+              url: body.clienturl,
+              address: body.clientaddress
             },{transaction: t})
             .then(res => {
               return orms['account'].create({

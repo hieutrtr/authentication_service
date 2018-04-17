@@ -1,4 +1,3 @@
-import auth from './routers/auth';
 import role from './routers/role';
 import account from './routers/account';
 var express = require('express');
@@ -17,7 +16,6 @@ export default function(connections,port) {
   });
 
   app.use('/account',account);
-  app.use('/auth',auth);
   app.use('/role',role)
 
   app.listen(port, function () {
