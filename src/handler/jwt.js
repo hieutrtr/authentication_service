@@ -21,18 +21,18 @@ export default class JWT {
 
   createLoginToken(payload) {
     if (payload.username === undefined || payload.username === '') {
-      return Promise.reject({error:'missing username'})
+      return Promise.reject({status:400,error:{description:'missing username',code:'create_token_fail'}})
     }
     if (payload.password_hash === undefined || payload.password_hash === '') {
-      return Promise.reject({error:'missing password'})
+      return Promise.reject({status:400,error:{description:'missing password',code:'create_token_fail'}})
     }
     if (payload.id === undefined || payload.id === '') {
-      return Promise.reject({error:'missing id'})
+      return Promise.reject({status:400,error:{description:'missing id',code:'create_token_fail'}})
     }
     var secretKey = this.secretKey
     return new Promise((resolve,reject) => {
       if (secretKey === undefined || secretKey === '') {
-        reject({status:500,error:"missing in serect key"});
+        reject({status:500,error:{description:'missing secretKey',code:'create_token_fail'}});
       }
       var reftk = uuidv1()
       this.redis.set(reftk,payload.id)
@@ -45,18 +45,18 @@ export default class JWT {
 
   refreshToken(payload,refreshToken) {
     if (payload.username === undefined || payload.username === '') {
-      return Promise.reject({error:'missing username'})
+      return Promise.reject({status:400,error:{description:'missing username',code:'refresh_token_fail'}})
     }
     if (payload.id === undefined || payload.id === '') {
-      return Promise.reject({error:'missing id'})
+      return Promise.reject({status:400,error:{description:'missing id',code:'refresh_token_fail'}})
     }
     if (refreshToken === undefined || refreshToken === '') {
-      return Promise.reject({error:'missing refreshToken'})
+      return Promise.reject({status:400,error:{description:'missing refreshToken',code:'refresh_token_fail'}})
     }
     var secretKey = this.secretKey
     return new Promise((resolve,reject) => {
       if (secretKey === undefined || secretKey === '') {
-        reject({status:500,message:"missing in serect key"});
+        reject({status:500,error:{description:'missing secretKey',code:'refresh_token_fail'}});
       }
       this.redis.get(refreshToken, (err,id) => {
         if (id === payload.id) {
@@ -65,7 +65,7 @@ export default class JWT {
           }, secretKey, { expiresIn: '15m' });
           resolve({token:tk});
         } else {
-         reject({status:400,message:"refresh token is invalid"});
+         reject({status:400,error:{description:'invalid refreshToken',code:'refresh_token_fail'}});
         }
       });
     });
@@ -73,10 +73,10 @@ export default class JWT {
 
   revokeToken(id,refreshToken) {
     if (id === undefined || id === '') {
-      return Promise.reject({error:'missing id'})
+      return Promise.reject({status:400,error:{description:'missing id',code:'revoke_token_fail'}})
     }
     if (refreshToken === undefined || refreshToken === '') {
-      return Promise.reject({error:'missing refreshToken'})
+      return Promise.reject({status:400,error:{description:'missing refreshToken',code:'revoke_token_fail'}})
     }
     return new Promise((resolve,reject) => {
       this.redis.get(refreshToken, (err,rid) => {
@@ -84,7 +84,7 @@ export default class JWT {
           this.redis.del(refreshToken)
           resolve()
         } else {
-         reject({status:400,message:"refresh token is invalid"});
+         reject({status:400,error:{description:'invalid refreshToken',code:'refresh_token_fail'}});
         }
       });
     });

@@ -193,7 +193,7 @@ export default class Mysql {
         resolve(data);
       }).catch(err => {
         delete err.errors[0].instance
-        reject({message:err.errors})
+        reject({status:400,error:{...err.errors, code:"register_fail"}})
       });
     });
   }

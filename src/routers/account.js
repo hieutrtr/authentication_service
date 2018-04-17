@@ -7,7 +7,7 @@ router.post('/', (req, res) => {
     res.send({message:"register succesfully",data:result})
   })
   .catch(err => {
-    res.status(err.status).send(err.message)
+    res.status(err.status).send(err)
   });
 });
 
@@ -20,11 +20,11 @@ router.post('/:accountId/refreshToken', (req,res) => {
       res.send({message:"refresh succesfully",result})
     })
     .catch(err => {
-      res.status(err.status).send(err.message)
+      res.status(err.status).send(err)
     });
   })
   .catch(err => {
-    res.status(err.status).send(err.message)
+    res.status(err.status).send(err)
   });
 });
 
@@ -36,28 +36,23 @@ router.post('/login', (req, res) => {
       res.send({message:"login succesfully",result})
     })
     .catch(err => {
-      console.log(err)
-      res.status(err.status).send(err.error)
+      res.status(err.status).send(err)
     });
   })
   .catch(err => {
-    res.status(err.status).send(err.error)
+    res.status(err.status).send(err)
   });
 });
 
 router.post('/logout', (req, res) => {
-  if(req.body.refreshToken) {
-    // TODO : optimize not hit db
-    req.app.locals.jwt.revokeToken(req.body.accountId,req.body.refreshToken)
-    .then(result => {
-      res.send({message:"revoke succesfully",result})
-    })
-    .catch(err => {
-      res.status(err.status).send(err.message)
-    });
-  } else {
-    res.status(400).send("refresh token is invalid")
-  }
+  // TODO : optimize not hit db
+  req.app.locals.jwt.revokeToken(req.body.accountId,req.body.refreshToken)
+  .then(result => {
+    res.send({message:"revoke succesfully",result})
+  })
+  .catch(err => {
+    res.status(err.status).send(err)
+  });
 });
 
 
