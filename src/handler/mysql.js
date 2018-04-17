@@ -10,16 +10,16 @@ export default class Mysql {
 
   static syncModels(dbi) {
     if (dbi.host === undefined || dbi.host === '') {
-      return Promise.reject({error:"missing mysql host"})
+      return Promise.reject({status:400,error:{description:'missing mysql host',code:'connect_db_fail'}})
     }
     if (dbi.database === undefined || dbi.database === '') {
-      return Promise.reject({error:"missing mysql database name"})
+      return Promise.reject({status:400,error:{description:'missing mysql database name',code:'connect_db_fail'}})
     }
     if (dbi.user === undefined || dbi.user === '') {
-      return Promise.reject({error:"missing mysql user"})
+      return Promise.reject({status:400,error:{description:'missing mysql user',code:'connect_db_fail'}})
     }
     if (dbi.password === undefined) {
-      return Promise.reject({error:"missing mysql password"})
+      return Promise.reject({status:400,error:{description:'missing mysql password',code:'connect_db_fail'}})
     }
     const {
       host,
@@ -63,7 +63,7 @@ export default class Mysql {
 
   refreshLogin(accountId) {
     if (accountId === undefined || accountId === '') {
-      return Promise.reject({error:'missing accountId'})
+      return Promise.reject({status:400,error:{description:'missing accountId',code:'refresh_login_fail'}})
     }
     var sequelize = this.sequelize
     var orms = this.orms
@@ -85,10 +85,10 @@ export default class Mysql {
 
   setRole(body) {
     if (body.policyName === undefined || body.policyName === '') {
-      return Promise.reject({error:'missing policyName'})
+      return Promise.reject({status:400,error:{description:'missing policyName',code:'set_role_fail'}})
     }
     if (body.accountId === undefined || body.accountId === '') {
-      return Promise.reject({error:'missing accountId'})
+      return Promise.reject({status:400,error:{description:'missing accountId',code:'set_role_fail'}})
     }
     var sequelize = this.sequelize
     var orms = this.orms
@@ -118,10 +118,10 @@ export default class Mysql {
 
   login(body) {
     if (body.username === undefined || body.username === '') {
-      return Promise.reject({error:'missing username'})
+      return Promise.reject({status:400,error:{description:'missing username',code:'login_fail'}})
     }
     if (body.password === undefined || body.password === '') {
-      return Promise.reject({error:'missing password'})
+      return Promise.reject({status:400,error:{description:'missing password',code:'login_fail'}})
     }
     var sequelize = this.sequelize
     var orms = this.orms
@@ -137,12 +137,11 @@ export default class Mysql {
           if (account.toJSON().password_hash == sha256(body.password)) {
             resolve(account.toJSON());
           } else {
-            reject({error:{message:"wrong password"}})
+            reject({status:400,error:{description:'wrong password',code:'login_fail'}})
           }
         })
         .catch(err => {
-          console.log(err)
-          reject({error:err})
+          reject({status:400,error:{...err.errors,code:'login_fail'}})
         });
       });
     });

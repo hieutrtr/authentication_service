@@ -11,10 +11,10 @@ export default class JWT {
 
   static connect(secretKey,redisInfo) {
     if (redisInfo.port === undefined || redisInfo.port === '') {
-      return Promise.reject({error:'missing port'})
+      return Promise.reject({status:400,error:{description:'missing port',code:'connect_cache_fail'}})
     }
     if (redisInfo.host === undefined || redisInfo.host === '') {
-      return Promise.reject({error:'missing host'})
+      return Promise.reject({status:400,error:{description:'missing host',code:'connect_cache_fail'}})
     }
     return Promise.resolve(new JWT(secretKey,redis.createClient(redisInfo.port,redisInfo.host)))
   }
