@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize'
 import {schema,associations} from '../models/authentication';
-var sha256 = require('sha256');
+import sha256 from 'sha256'
 
 export default class Mysql {
   constructor(sequelize,orms) {

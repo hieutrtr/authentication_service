@@ -1,7 +1,7 @@
 import Mysql from './handler/mysql';
 import JWT from './handler/jwt';
 import startServer from './server'
-var log4js = require('log4js');
+import log4js from 'log4js'
 var logger = log4js.getLogger();
 
 logger.level = process.env.LOG_LEVEL || 'error';

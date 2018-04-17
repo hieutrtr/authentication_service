@@ -1,8 +1,8 @@
 import role from './routers/role';
 import account from './routers/account';
-var express = require('express');
-var bodyParser = require('body-parser');
-var request = require('request');
+import express from 'express'
+import bodyParser from 'body-parser'
+import request from 'request'
 var app = express()
 
 export default function(connections,port) {

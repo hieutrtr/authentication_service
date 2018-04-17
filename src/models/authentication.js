@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-var sha256 = require('sha256');
+import Sequelize from 'sequelize'
+import sha256 from 'sha256'
 
 export const associations = {
   account:{client:'clientId'},

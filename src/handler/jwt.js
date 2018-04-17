@@ -1,6 +1,6 @@
-var token = require('jsonwebtoken');
-const uuidv1 = require('uuid/v1');
-var redis = require("redis")
+import token from 'jsonwebtoken'
+import uuidv1 from 'uuid/v1'
+import redis from 'redis'
 var jwt = {}
 
 export default class JWT {
