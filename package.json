@@ -24,7 +24,7 @@
     "rimraf": "^2.6.2"
   },
   "scripts": {
-    "start": "babel-node main.js",
+    "start": "babel-node dev.js",
     "test": "mocha --compilers js:babel-core/register ./src/test/"
   },
   "author": "",
