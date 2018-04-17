@@ -31,11 +31,17 @@ Use environment variables for configuration of ORM database (MySQL).
 ```bash
 export DB_HOST=localhost DB_NAME=smlauth DB_USER=api DB_PASS=123456
 ```
-Test service
-```
-npm test
-```
 Start service
-```
+```bash
+npm i
 npm start
+```
+Build production
+```bash
+npm i
+bash build.js
+```
+Test service
+```bash
+npm test
 ```
