@@ -1,0 +1,33 @@
+{
+  "name": "sml_authen",
+  "version": "1.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "log4js": "^2.5.3",
+    "mocha": "^5.1.0",
+    "mysql2": "^1.5.3",
+    "redis": "^2.8.0",
+    "request": "^2.85.0",
+    "sequelize": "^4.37.6",
+    "sha256": "^0.2.0",
+    "should": "^13.2.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "rimraf": "^2.6.2"
+  },
+  "scripts": {
+    "start": "babel-node dev.js",
+    "test": "mocha --compilers js:babel-core/register ./src/test/"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
