@@ -1,4 +1,4 @@
-var db = require('../handler/mysql')
+var db = require('../dist/handler/mysql').default
 
 var dbHost = process.env.DB_HOST || ''
 var dbName = process.env.DB_NAME || ''
