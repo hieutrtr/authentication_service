@@ -1,6 +1,9 @@
 import express from 'express'
 var router = express.Router()
 
+/*
+Register account with (in)existed client
+*/
 router.post('/', (req, res) => {
   req.app.locals.db.register(req.body)
   .then(result => {
@@ -28,6 +31,11 @@ router.post('/:accountId/refreshToken', (req,res) => {
   });
 });
 
+/*
+Login by username & password
+Use handler/jwt.js
+Response: {token,refresh_token}
+*/
 router.post('/login', (req, res) => {
   req.app.locals.db.login(req.body)
   .then(result => {

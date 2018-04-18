@@ -18,7 +18,13 @@ export default class JWT {
     }
     return Promise.resolve(new JWT(secretKey,redis.createClient(redisInfo.port,redisInfo.host)))
   }
-
+  /*
+    Sign token and refresh_token with secretKey
+    response {
+      token: include username,password_hash,accountId(id),role
+      refresh_token: include accountId(id)
+    }
+  */
   createToken(payload) {
     if (payload.username === undefined || payload.username === '') {
       return Promise.reject({status:400,error:{description:'missing username',code:'create_token_fail'}})
@@ -43,7 +49,12 @@ export default class JWT {
       resolve({token:tk,refresh_token:reftk});
     });
   }
-
+  /*
+    Refresh access token
+    1. Check blacklist of refreshToken in redis
+    2. Verify accountId in refreshToken's payload
+    response new access token
+  */
   refreshToken(payload,refreshToken) {
     if (payload.username === undefined || payload.username === '') {
       return Promise.reject({status:400,error:{description:'missing username',code:'refresh_token_fail'}})
@@ -79,6 +90,10 @@ export default class JWT {
     });
   }
 
+  /*
+    Blacklist refreshToken with accountId.
+    store refreshToken in redis with expired time equal expired time of refreshToken
+  */
   revokeToken(id,refreshToken) {
     if (id === undefined || id === '') {
       return Promise.reject({status:400,error:{description:'missing id',code:'revoke_token_fail'}})
