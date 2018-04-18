@@ -78,7 +78,7 @@ export default class Mysql {
       }).then(account => {
         resolve(account.toJSON());
       }).catch(function (err) {
-        reject(err)
+        reject({status:400,error:{...err.errors,code:'refresh_login_fail'}})
       });
     });
   }
@@ -147,6 +147,18 @@ export default class Mysql {
     });
   }
 
+  registerControler(orms,oClient,oAccount,t) {
+    if (oAccount.clientId === null) {
+      return orms['client'].create(oClient,{transaction: t})
+      .then(res => {
+        oAccount.clientId = res.toJSON().id
+        return orms['account'].create(oAccount,{transaction: t})
+      });
+    } else {
+      return orms['account'].create(oAccount,{transaction: t})
+    }
+  }
+
   register(body) {
     var sequelize = this.sequelize
     var orms = this.orms
@@ -159,31 +171,20 @@ export default class Mysql {
           }
         }, {transaction: t})
         .then(res => {
-          if (res === null) {
-            return orms['client'].create({
-              name: body.clientName,
-              code: body.clientcode,
-              url: body.clienturl,
-              address: body.clientaddress
-            },{transaction: t})
-            .then(res => {
-              return orms['account'].create({
-                clientId: res.toJSON().id,
-                username: body.username,
-                password: body.password,
-                firstName: body.firstName,
-                lastName: body.lastName
-              },{transaction: t})
-            });
-          } else {
-            return orms['account'].create({
-              clientId: res.toJSON().id,
-              username: body.username,
-              password: body.password,
-              firstName: body.firstName,
-              lastName: body.lastName
-            },{transaction: t})
+          var oClient = {
+            name: body.clientName,
+            code: body.clientcode,
+            url: body.clienturl,
+            address: body.clientaddress
           }
+          var oAccount = {
+            clientId: (res !== null ? res.toJSON().id : null),
+            username: body.username,
+            password: body.password,
+            firstName: body.firstName,
+            lastName: body.lastName
+          }
+          return registerControler(orms,oClient,oAccount,t)
         });
       }).then(res => {
         var data = res.toJSON()
