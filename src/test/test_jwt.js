@@ -43,30 +43,30 @@ describe("jwt", () => {
       return JWT.connect("key",redisInfo).should.be.rejected.and.eventually.have.property('error');
     });
   });
-  describe("createLoginToken", () => {
+  describe("createToken", () => {
     it("should have error when id is undefined", () => {
       delete payload.id
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
     it("should have error when username is undefined", () => {
       delete payload.username
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
     it("should have error when password_hash is undefined", () => {
       delete payload.password_hash
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
     it("should have error when id is empty", () => {
       payload.id = ''
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
     it("should have error when username is empty", () => {
       payload.username = ''
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
     it("should have error when password_hash is empty", () => {
       payload.password_hash = ''
-      return jwt.createLoginToken(payload).should.be.rejected.and.eventually.have.property('error');
+      return jwt.createToken(payload).should.be.rejected.and.eventually.have.property('error');
     });
   });
   describe("refreshToken", () => {

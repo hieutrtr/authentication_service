@@ -29,7 +29,7 @@ docker run --name redis -p 6379:6379  -d redis redis-server --appendonly yes
 ```
 Use environment variables for configuration of ORM database (MySQL).
 ```bash
-export DB_HOST=localhost DB_NAME=smlauth DB_USER=hieu DB_PASS=123456
+export DB_HOST=localhost DB_NAME=smlauth DB_USER=hieu DB_PASSWORD=123456
 ```
 Use environment variables for configuration of JWT + Redis.
 ```bash

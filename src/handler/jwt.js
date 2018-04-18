@@ -19,7 +19,7 @@ export default class JWT {
     return Promise.resolve(new JWT(secretKey,redis.createClient(redisInfo.port,redisInfo.host)))
   }
 
-  createLoginToken(payload) {
+  createToken(payload) {
     if (payload.username === undefined || payload.username === '') {
       return Promise.reject({status:400,error:{description:'missing username',code:'create_token_fail'}})
     }
@@ -34,8 +34,9 @@ export default class JWT {
       if (secretKey === undefined || secretKey === '') {
         reject({status:500,error:{description:'missing secretKey',code:'create_token_fail'}});
       }
-      var reftk = uuidv1()
-      this.redis.set(reftk,payload.id)
+      var reftk = token.sign({
+        data: {accountId:payload.id,type:"refresh_token"}
+      }, secretKey, { expiresIn: '15d' });
       var tk = token.sign({
         data: payload
       }, secretKey, { expiresIn: '15m' });
@@ -58,14 +59,21 @@ export default class JWT {
       if (secretKey === undefined || secretKey === '') {
         reject({status:500,error:{description:'missing secretKey',code:'refresh_token_fail'}});
       }
-      this.redis.get(refreshToken, (err,id) => {
-        if (id === payload.id) {
-          var tk = token.sign({
-            data: payload
-          }, secretKey, { expiresIn: '15m' });
-          resolve({token:tk});
+      this.redis.get(refreshToken, (err,rid) => {
+        if (rid === payload.id) {
+          this.redis.del(refreshToken)
+          reject({status:400,error:{description:'refreshToken was blacklisted',code:'refresh_token_fail'}});
         } else {
-         reject({status:400,error:{description:'invalid refreshToken',code:'refresh_token_fail'}});
+          token.verify(refreshToken, secretKey, function(err, decoded) {
+            if (decoded.data.accountId === payload.id && decoded.data.type === "refresh_token") {
+              var tk = token.sign({
+                data: payload
+              }, secretKey, { expiresIn: '15m' });
+              resolve({token:tk});
+            } else {
+             reject({status:400,error:{description:'invalid refreshToken',code:'refresh_token_fail'}});
+            }
+          });
         }
       });
     });
@@ -78,15 +86,16 @@ export default class JWT {
     if (refreshToken === undefined || refreshToken === '') {
       return Promise.reject({status:400,error:{description:'missing refreshToken',code:'revoke_token_fail'}})
     }
+    var secretKey = this.secretKey
     return new Promise((resolve,reject) => {
-      this.redis.get(refreshToken, (err,rid) => {
-        if (rid === id) {
-          this.redis.del(refreshToken)
+      token.verify(refreshToken, secretKey, function(err, decoded) {
+        if (decoded.data.accountId === id && decoded.data.type === "refresh_token") {
+          this.redis.set(refreshToken,id)
           resolve()
         } else {
-         reject({status:400,error:{description:'invalid refreshToken',code:'refresh_token_fail'}});
+         reject({status:400,error:{description:'invalid refreshToken',code:'revoke_token_fail'}});
         }
       });
-    });
+    })
   }
 }

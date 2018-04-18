@@ -31,7 +31,7 @@ router.post('/:accountId/refreshToken', (req,res) => {
 router.post('/login', (req, res) => {
   req.app.locals.db.login(req.body)
   .then(result => {
-    req.app.locals.jwt.createLoginToken(result)
+    req.app.locals.jwt.createToken(result)
     .then(result => {
       res.send({message:"login succesfully",result})
     })
