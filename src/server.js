@@ -5,20 +5,20 @@ import bodyParser from 'body-parser'
 import request from 'request'
 var app = express()
 
-export default function(connections,port) {
+export default (connections,port) => {
   app.locals.db = connections.db
   app.locals.jwt = connections.jwt
 
   app.use(bodyParser.json());
 
-  app.get('/', function (req, res) {
+  app.get('/', (req, res) => {
     res.send('SML Authentication')
   });
 
   app.use('/account',account);
   app.use('/role',role)
 
-  app.listen(port, function () {
+  app.listen(port, () => {
     console.log('SML Authentication is listening on port ' + port + '!');
   });
 }

@@ -68,7 +68,7 @@ export default class Mysql {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
-      return sequelize.transaction(function (t) {
+      return sequelize.transaction((t) => {
         return orms['account'].find({
           attributes: ['username','id'],
           where: {
@@ -77,7 +77,7 @@ export default class Mysql {
         },{transaction: t})
       }).then(account => {
         resolve(account.toJSON());
-      }).catch(function (err) {
+      }).catch((err) => {
         reject({status:400,error:{...err.errors,code:'refresh_login_fail'}})
       });
     });
@@ -93,7 +93,7 @@ export default class Mysql {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
-      return sequelize.transaction(function(t) {
+      return sequelize.transaction((t) => {
         return orms['policy'].find({
           attributes: ['id'],
           where: {
@@ -126,7 +126,7 @@ export default class Mysql {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
-      return sequelize.transaction(function(t) {
+      return sequelize.transaction((t) => {
         return orms['account'].findOne({
           attributes: ['username','password_hash','id'],
           where: {
@@ -163,7 +163,7 @@ export default class Mysql {
     var sequelize = this.sequelize
     var orms = this.orms
     return new Promise((resolve,reject) => {
-      return sequelize.transaction(function (t) {
+      return sequelize.transaction((t) => {
         return orms['client'].findOne({
           attributes: ['id'],
           where: {
@@ -184,7 +184,7 @@ export default class Mysql {
             firstName: body.firstName,
             lastName: body.lastName
           }
-          return registerControler(orms,oClient,oAccount,t)
+          return this.registerControler(orms,oClient,oAccount,t)
         });
       }).then(res => {
         var data = res.toJSON()

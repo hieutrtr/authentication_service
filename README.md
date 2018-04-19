@@ -22,6 +22,11 @@ docker run --name=mysql1 -p 3306:3306 -p 33060:33060 -d mysql/mysql-server:5.7
 docker logs mysql1 # to get GENERATED ROOT PASSWORD
 
 docker exec -it mysql1 mysql -uroot -p # enter password
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+CREATE USER 'api'@'%' IDENTIFIED BY 'smlauthen';
+CREATE DATABASE smlauthen;
+GRANT ALL PRIVILEGES ON smlauthen.* TO 'api'@'%';
 ```
 Redis
 ```bash
@@ -55,11 +60,11 @@ Run docker
 docker run --name smartlog-auth-service -p 3000:3000 \
 --link mysql1 --link redis \
 -e DB_HOST=mysql1 \
--e DB_NAME=smlauth \
--e DB_USER=hieu \
--e DB_PASSWORD=123456 \
+-e DB_NAME=smlauthen \
+-e DB_USER=api \
+-e DB_PASSWORD=smlauthen \
 -e REDIS_PORT=6379 \
 -e REDIS_HOST=redis \
 -e JWT_KEY=sml#uthen \
- -d smartlog-auth-service
+ -d hieutrtr/smartlog-auth-service
 ```

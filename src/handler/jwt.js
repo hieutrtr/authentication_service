@@ -75,7 +75,7 @@ export default class JWT {
           this.redis.del(refreshToken)
           reject({status:400,error:{description:'refreshToken was blacklisted',code:'refresh_token_fail'}});
         } else {
-          token.verify(refreshToken, secretKey, function(err, decoded) {
+          token.verify(refreshToken, secretKey, (err, decoded) => {
             if (decoded.data.accountId === payload.id && decoded.data.type === "refresh_token") {
               var tk = token.sign({
                 data: payload
@@ -103,7 +103,7 @@ export default class JWT {
     }
     var secretKey = this.secretKey
     return new Promise((resolve,reject) => {
-      token.verify(refreshToken, secretKey, function(err, decoded) {
+      token.verify(refreshToken, secretKey, (err, decoded) => {
         if (decoded.data.accountId === id && decoded.data.type === "refresh_token") {
           this.redis.set(refreshToken,id)
           resolve()
